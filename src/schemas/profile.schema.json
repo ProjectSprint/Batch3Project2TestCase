@@ -1,0 +1,42 @@
+{
+  "$ref": "#/definitions/Profile",
+  "schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "fileId": {
+          "type": "string"
+        },
+        "fileUri": {
+          "type": "string"
+        },
+        "fileThumbnailUri": {
+          "type": "string"
+        },
+        "bankAccountName": {
+          "type": "string"
+        },
+        "bankAccountHolder": {
+          "type": "string"
+        },
+        "bankAccountNumber": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "phone",
+        "bankAccountName",
+        "bankAccountHolder",
+        "bankAccountNumber"
+      ]
+    }
+  }
+}

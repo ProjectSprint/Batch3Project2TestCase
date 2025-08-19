@@ -1,0 +1,81 @@
+{
+  "$ref": "#/definitions/PurchaseResponse",
+  "schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "PurchaseResponse": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "purchasedItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "productId": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "qty": {
+                "type": "number"
+              },
+              "price": {
+                "type": "number"
+              },
+              "sku": {
+                "type": "string"
+              },
+              "fileId": {
+                "type": "string"
+              },
+              "fileUri": {
+                "type": "string"
+              },
+              "fileThumbnailUri": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "totalPrice": {
+          "type": "number"
+        },
+        "paymentDetails": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "bankAccountName": {
+                "type": "string"
+              },
+              "bankAccountHolder": {
+                "type": "string"
+              },
+              "bankAccountNumber": {
+                "type": "string"
+              },
+              "totalPrice": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "purchaseId": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

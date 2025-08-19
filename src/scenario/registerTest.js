@@ -6,7 +6,7 @@ import {
   generateRandomPassword,
   generateTestObjects,
 } from "../helper/generator.js";
-import { testPostJsonAssert } from "../helper/request.js";
+import { testPostJsonAssert } from "../helper/testRequest.js";
 
 /**
  * @param {import("../types/config.d.ts").Config} config

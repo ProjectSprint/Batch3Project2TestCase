@@ -1,16 +1,16 @@
-type User = {
-  preferences?: string | null;
-  weightUnit?: string | null;
-  heightUnit?: string | null;
-  weight?: string | null;
-  height?: string | null;
-  imageUri?: string | null;
+export type User = {
+  // preferences?: string | null;
+  // weightUnit?: string | null;
+  // heightUnit?: string | null;
+  // weight?: string | null;
+  // height?: string | null;
+  // imageUri?: string | null;
   email: string;
   password: string;
   token: string;
 };
 
-enum ActivityType {
+export enum ActivityType {
   Walking = 'Walking',
   Yoga = 'Yoga',
   Stretching = 'Stretching',
@@ -24,7 +24,7 @@ enum ActivityType {
 }
 
 // Update the Activity type to use the enum
-type Activity = {
+export type Activity = {
   activityId: string;
   activityType: ActivityType;
   doneAt: Date;

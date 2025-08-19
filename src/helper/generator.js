@@ -251,8 +251,8 @@ export function generateRandomEmail() {
 
 /**
  * @returns {string}
-  * @param {number} minLength
-  * @param {number} maxLength
+ * @param {number} minLength
+ * @param {number} maxLength
  */
 export function generateRandomPassword(minLength = 5, maxLength = 15) {
   // Ensure minLength is not greater than maxLength
@@ -260,7 +260,8 @@ export function generateRandomPassword(minLength = 5, maxLength = 15) {
     [minLength, maxLength] = [maxLength, minLength];
   }
 
-  const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+  const length =
+    Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let password = "";
@@ -282,19 +283,20 @@ export function generateRandomPassword(minLength = 5, maxLength = 15) {
 export function generateRandomWord(minLength, maxLength) {
   // Input validation
   if (minLength > maxLength) {
-    throw new Error('minLength cannot be greater than maxLength');
+    throw new Error("minLength cannot be greater than maxLength");
   }
   if (minLength < 1 || maxLength < 1) {
-    throw new Error('Length parameters must be greater than 0');
+    throw new Error("Length parameters must be greater than 0");
   }
 
   const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
   // Generate random length between min and max
-  const length = Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+  const length =
+    Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
 
   // Generate the word
-  let result = '';
+  let result = "";
   for (let i = 0; i < length; i++) {
     const randomIndex = Math.floor(Math.random() * characters.length);
     result += characters[randomIndex];
@@ -313,26 +315,74 @@ export function generateRandomWord(minLength, maxLength) {
 export function generateRandomUsername() {
   // @type {readonly string[]} */
   const prefixes = [
-    "An", "Ben", "Jon", "Xen", "Lor",
-    "Mar", "Fel", "Cal", "Nor", "Zan",
-    "Vin", "Hal", "Eli", "Oli", "Ray",
-    "Sam", "Tim", "Ken", "Leo", "Kai"
+    "An",
+    "Ben",
+    "Jon",
+    "Xen",
+    "Lor",
+    "Mar",
+    "Fel",
+    "Cal",
+    "Nor",
+    "Zan",
+    "Vin",
+    "Hal",
+    "Eli",
+    "Oli",
+    "Ray",
+    "Sam",
+    "Tim",
+    "Ken",
+    "Leo",
+    "Kai",
   ];
 
   /** @type {readonly string[]} */
   const middles = [
-    "dra", "vi", "na", "lo", "ki",
-    "ra", "li", "no", "mi", "ta",
-    "ne", "ro", "sa", "mo", "ze",
-    "fa", "de", "pe", "su", "re"
+    "dra",
+    "vi",
+    "na",
+    "lo",
+    "ki",
+    "ra",
+    "li",
+    "no",
+    "mi",
+    "ta",
+    "ne",
+    "ro",
+    "sa",
+    "mo",
+    "ze",
+    "fa",
+    "de",
+    "pe",
+    "su",
+    "re",
   ];
 
   /** @type {readonly string[]}*/
   const suffixes = [
-    "son", "ton", "ly", "en", "er",
-    "man", "den", "ren", "vin", "sen",
-    "ler", "ter", "mon", "lin", "ker",
-    "nor", "len", "tan", "ver", "mer"
+    "son",
+    "ton",
+    "ly",
+    "en",
+    "er",
+    "man",
+    "den",
+    "ren",
+    "vin",
+    "sen",
+    "ler",
+    "ter",
+    "mon",
+    "lin",
+    "ker",
+    "nor",
+    "len",
+    "tan",
+    "ver",
+    "mer",
   ];
 
   let username = "";
@@ -364,26 +414,74 @@ export function generateRandomDate(from, to) {
 export function generateRandomName() {
   // @type {readonly string[]} */
   const prefixes = [
-    "An", "Ben", "Jon", "Xen", "Lor",
-    "Mar", "Fel", "Cal", "Nor", "Zan",
-    "Vin", "Hal", "Eli", "Oli", "Ray",
-    "Sam", "Tim", "Ken", "Leo", "Kai"
+    "An",
+    "Ben",
+    "Jon",
+    "Xen",
+    "Lor",
+    "Mar",
+    "Fel",
+    "Cal",
+    "Nor",
+    "Zan",
+    "Vin",
+    "Hal",
+    "Eli",
+    "Oli",
+    "Ray",
+    "Sam",
+    "Tim",
+    "Ken",
+    "Leo",
+    "Kai",
   ];
 
   /** @type {readonly string[]} */
   const middles = [
-    "dra", "vi", "na", "lo", "ki",
-    "ra", "li", "no", "mi", "ta",
-    "ne", "ro", "sa", "mo", "ze",
-    "fa", "de", "pe", "su", "re"
+    "dra",
+    "vi",
+    "na",
+    "lo",
+    "ki",
+    "ra",
+    "li",
+    "no",
+    "mi",
+    "ta",
+    "ne",
+    "ro",
+    "sa",
+    "mo",
+    "ze",
+    "fa",
+    "de",
+    "pe",
+    "su",
+    "re",
   ];
 
   /** @type {readonly string[]}*/
   const suffixes = [
-    "son", "ton", "ly", "en", "er",
-    "man", "den", "ren", "vin", "sen",
-    "ler", "ter", "mon", "lin", "ker",
-    "nor", "len", "tan", "ver", "mer"
+    "son",
+    "ton",
+    "ly",
+    "en",
+    "er",
+    "man",
+    "den",
+    "ren",
+    "vin",
+    "sen",
+    "ler",
+    "ter",
+    "mon",
+    "lin",
+    "ker",
+    "nor",
+    "len",
+    "tan",
+    "ver",
+    "mer",
   ];
   const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
   const middle = middles[Math.floor(Math.random() * middles.length)];
@@ -413,10 +511,10 @@ export function generateRandomNumber(min, max) {
 }
 
 /**
- * @param {import('../types/schema.d.ts').Params} params
+ * @param {import('../types/generator.d.ts').GenerateUrlParamFromObjSchema} params
  * @returns {string}
  */
-export function generateParamFromObj(params) {
+export function generateUrlParamFromObj(params) {
   return Object.entries(params)
     .map(
       ([key, value]) =>
@@ -453,7 +551,7 @@ export function generateBoolFromPercentage(percentage) {
 }
 
 /**
- * @param {import('../types/schema.d.ts').Schema} schema
+ * @param {import('../types/generator.d.ts').GenerateTestObjectSchema} schema
  * @param {import("k6").JSONValue} validTemplate
  * @returns {import("k6").JSONValue[]}
  */
@@ -572,7 +670,7 @@ export function generateTestObjects(schema, validTemplate) {
    * Generates test objects based on a given schema and a valid template.
    * The function creates a list of violations, which are test cases that violate the rules defined in the schema.
    * @param {string} propPath
-   * @param {import('../types/schema.d.ts').SchemaRule} propRules
+   * @param {import('../types/generator.d.ts').TestObjectSchema} propRules
    * @param {unknown} parentValue
    */
   function generateViolationsForProp(propPath, propRules, parentValue) {
@@ -681,14 +779,14 @@ export function generateTestObjects(schema, validTemplate) {
 
   return violations;
 }
-/** 
-  * @param {number} probability
-  * @param {Function} fn
-  * */
+/**
+ * @param {number} probability
+ * @param {Function} fn
+ * */
 export function withProbability(probability, fn) {
   // Ensure probability is between 0 and 1
   if (probability < 0 || probability > 1) {
-    throw new Error('Probability must be between 0 and 1');
+    throw new Error("Probability must be between 0 and 1");
   }
 
   // Generate random number between 0 and 1

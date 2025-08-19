@@ -1,0 +1,28 @@
+{
+  "$ref": "#/definitions/User",
+  "schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "User": {
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        },
+        "preference": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ],
+      "type": "object"
+    }
+  }
+}

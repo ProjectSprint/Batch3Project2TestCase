@@ -1,61 +1,61 @@
 {
   "compilerOptions": {
+    "types": [
+      "node"
+    ],
     // Allow JavaScript files to be included in the project
     "allowJs": true,
-
     // Enable type checking of JavaScript files
     "checkJs": true,
-
     // Generate .d.ts files for JavaScript files
     "declaration": true,
-
     // Allow default imports from modules with no default export
     "allowSyntheticDefaultImports": true,
-
     // Specify ECMAScript target version
     "target": "ES2020",
-
     // Specify module code generation
-    "module": "NodeNext",
-
+    "module": "commonjs",
     // Add type definitions for built-in JS APIs
-    "lib": ["ES2020", "DOM"],
-
+    "lib": [
+      "ES2020",
+      "DOM"
+    ],
     // Enable strict type checking
     "strict": true,
-
     // Allow importing .js files with type information
-    "moduleResolution": "NodeNext",
-
+    "moduleResolution": "node",
     // Base directory to resolve non-relative module names
     "baseUrl": "./",
-
     // Output directory for compiled files
     "outDir": "./dist",
-
     // Skip type checking of declaration files
     "skipLibCheck": true,
-
     // Ensure consistent casing in file names
     "forceConsistentCasingInFileNames": true,
-
     // Allow importing JSON files
     "resolveJsonModule": true,
-
     // Enable source maps for debugging
-    "sourceMap": true
+    "sourceMap": true,
+    "paths": {
+      "k6/http": [
+        "./src/types/k6-http.d.ts"
+      ],
+      "k6/execution": [
+        "./src/types/k6-execution.d.ts"
+      ],
+      "k6": [
+        "./src/types/k6.d.ts"
+      ]
+    }
   },
   "include": [
-    "src/**/*.js", // Include JavaScript files
-    "src/**/*.jsx", // Include JSX files if you're using React
-    "src/**/*.ts", // Include TypeScript files
-    "src/**/*.d.ts" // Include TypeScript declaration files
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.d.ts"
   ],
-  "exclude": ["node_modules", "dist"],
-  "compilerOptions": {
-    "paths": {
-      "k6/http": ["./src/types/k6-http.d.ts"],
-      "k6": ["./src/types/k6.d.ts"]
-    }
-  }
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
 }
