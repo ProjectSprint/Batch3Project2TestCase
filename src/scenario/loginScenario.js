@@ -207,7 +207,7 @@ export function RegisterScenario(config, tags, info) {
       tags: tags,
     });
   }
-  return undefined;
+  
   if (registerResult.isSuccess) {
       registeredUserEmail.push({
       email: positivePayload.email,

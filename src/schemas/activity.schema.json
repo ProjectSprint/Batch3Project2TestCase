@@ -1,0 +1,71 @@
+{
+  "$ref": "#/definitions/Activity",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "definitions": {
+    "ActivityCategory": {
+      "enum": [
+        "Walking",
+        "Yoga",
+        "Stretching",
+        "Cycling",
+        "Swimming",
+        "Dancing",
+        "Hiking",
+        "Running",
+        "HIIT",
+        "JumpRope"
+      ],
+      "type": "string"
+    },
+    "Activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activityId": {
+          "type": "string"
+        },
+        "activityType": {
+          "$ref": "#/definitions/ActivityCategory"
+        },
+        "doneAt": {
+          "type": "string"
+        },
+        "durationInMinutes": {
+          "type": "number",
+          "minimum": 1
+        },
+        "caloriesBurned": {
+          "type": "number",
+          "minimum": 1
+        },
+        "createdAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "updatedAt": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "activityId",
+        "activityType",
+        "doneAt",
+        "durationInMinutes",
+        "caloriesBurned",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Activities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Activity"
+      }
+    }
+  }
+}

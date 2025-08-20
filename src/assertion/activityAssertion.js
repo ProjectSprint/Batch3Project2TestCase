@@ -1,17 +1,19 @@
 import { combine } from "../helper/generator.js";
 import { createValidator } from "../helper/typeAssertion.js";
 
-const productSchema = open("../schemas/product.schema.json");
-const isValid = createValidator(productSchema);
-const isProductsValid = createValidator(productSchema.replace("#/definitions/Product", "#/definitions/Products"));
+const activitySchema = open("../schemas/activity.schema.json");
+const isValid = createValidator(activitySchema);
+
+// hasil open adalah string, replace aja kebutuhannya apa
+const isProductsValid = createValidator(activitySchema.replace("#/definitions/Activity", "#/definitions/Activities"));
 
 /**
  * Asserts that a value is a valid User object
  * @param {any} value - The value to assert
- * @returns {value is import("src/entity/app.js").Product}
+ * @returns {value is import("src/entity/app.js").Activity}
  * @throws {import("src/types/typeAssertion.js").ValidationError[]}
  */
-export function isProduct(value) {
+export function isActivity(value) {
   const obj = value;
   const res = isValid(obj);
   if (res.valid) {
@@ -23,10 +25,10 @@ export function isProduct(value) {
 /**
  * Asserts that a value is a valid User object
  * @param {any} value - The value to assert
- * @returns {value is import("src/entity/app.js").Product[]}
+ * @returns {value is import("src/entity/app.js").Activity[]}
  * @throws {import("src/types/typeAssertion.js").ValidationError[]}
  */
-export function isProducts(value) {
+export function isActivities(value) {
   const obj = value;
   const res = isProductsValid(obj);
   if (res.valid) {
@@ -40,15 +42,15 @@ export function isProducts(value) {
  * @param {import("k6/http").RefinedResponse<any>} res
  * @param {any} positivePayload
  * @param {string} featureName
- * @returns {import('src/entity/app.js').Product | undefined}
+ * @returns {import('src/entity/app.js').Activity | undefined}
  */
-export function getProduct(res, positivePayload, featureName) {
+export function getActivity(res, positivePayload, featureName) {
   let obj;
   try {
     const jsonResult = res.json();
     if (jsonResult && typeof jsonResult == "object") {
       obj = combine(jsonResult, positivePayload);
-      if (isProduct(obj)) {
+      if (isActivity(obj)) {
         return obj;
       }
       console.log(featureName + " | object is not matching schema", obj);
@@ -66,19 +68,18 @@ export function getProduct(res, positivePayload, featureName) {
  * @param {import("k6/http").RefinedResponse<any>} res
  * @param {any} positivePayload
  * @param {string} featureName
- * @returns {import('src/entity/app.js').Product[] | undefined}
+ * @returns {import('src/entity/app.js').Activity[] | undefined}
  */
-export function getProducts(res, positivePayload, featureName) {
+export function getActivitites(res, positivePayload, featureName) {
   let obj;
   try {
     const jsonResult = res.json();
     if (jsonResult && typeof jsonResult == "object") {
 
-      // blocker: bentuk setelah combine() seharusnya tetap array, yang terjadi adalah mengubah menjadi map
       // obj = combine(jsonResult, positivePayload);
 
       obj = jsonResult;
-      if (isProducts(obj)) {
+      if (isActivities(obj)) {
         return obj;
       }
       console.log(featureName + " | object is not matching schema", obj);

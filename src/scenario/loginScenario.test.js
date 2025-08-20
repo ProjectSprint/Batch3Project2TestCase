@@ -94,7 +94,7 @@ test("Register Scenario", async (go) => {
     );
   });
 
-  go.test("LoginEmailSceario should return 0 exit code", async () => {
+  go.test("LoginSceario should return 0 exit code", async () => {
     await assert.doesNotReject(
       exec(`${process.env.K6_PATH} run src/main.js`, {
         env: {

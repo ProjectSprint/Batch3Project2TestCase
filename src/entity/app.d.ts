@@ -57,3 +57,9 @@ export type Activity = {
   caloriesBurned: number;
   createdAt: Date;
 }
+
+export type UploadedFile = {
+  fileId: string;
+  fileUri: string;
+  fileThumbnailUri: string;
+}
