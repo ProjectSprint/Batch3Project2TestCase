@@ -2,41 +2,103 @@
   "$ref": "#/definitions/Profile",
   "schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
+    "PreferenceEnum": {
+      "enum": [
+        "CARDIO",
+        "WEIGHT"
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "WeightEnum": {
+      "enum": [
+        "KG",
+        "LBS"
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "HeightEnum": {
+      "enum": [
+        "CM",
+        "INCH"
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
     "Profile": {
-      "type": "object",
       "additionalProperties": false,
       "properties": {
         "email": {
           "type": "string"
         },
-        "phone": {
+        "password": {
           "type": "string"
         },
-        "fileId": {
+        "token": {
           "type": "string"
         },
-        "fileUri": {
-          "type": "string"
+        "preference": {
+          "type": [
+            "string",
+            "null"
+          ]
         },
-        "fileThumbnailUri": {
-          "type": "string"
+        "weightUnit": {
+          "type": [
+            "string",
+            "null"
+          ] 
         },
-        "bankAccountName": {
-          "type": "string"
+        "heightUnit": {
+          "type": [
+            "string",
+            "null"
+          ] 
         },
-        "bankAccountHolder": {
-          "type": "string"
+        "weight": {
+          "type": [
+            "number",
+            "null"
+          ] ,
+          "minimum": 10,
+          "maximum": 1000
         },
-        "bankAccountNumber": {
-          "type": "string"
+        "height": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 3,
+          "maximum": 250
+        },
+        "imageUri": {
+          "type": [
+            "string",
+            "null"
+          ] 
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ] 
         }
       },
       "required": [
-        "phone",
-        "bankAccountName",
-        "bankAccountHolder",
-        "bankAccountNumber"
-      ]
+        "preference",
+        "weightUnit",
+        "heightUnit",
+        "weight",
+        "height"
+      ],
+      "type": "object"
     }
   }
 }

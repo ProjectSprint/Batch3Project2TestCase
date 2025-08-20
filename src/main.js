@@ -1,5 +1,6 @@
 import exec from "k6/execution";
 import { LoginScenario, RegisterScenario } from "./scenario/loginScenario.js";
+import { GetProfileScenario, PatchProfileScenario } from "./scenario/profileScenario.js";
 
 export const options = {
   vus: 1,
@@ -19,7 +20,9 @@ const invalidFile = open("./figure/sql-5KB.sql", "b");
  */
 const scenarios = {
   LoginScenario: LoginScenario,
-  RegisterScenario: RegisterScenario
+  RegisterScenario: RegisterScenario,
+  GetProfileScenario: GetProfileScenario,
+  PatchProfileScenario: PatchProfileScenario,
 };
 
 export default function () {

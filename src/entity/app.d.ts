@@ -1,13 +1,38 @@
 export type User = {
-  // preferences?: string | null;
-  // weightUnit?: string | null;
-  // heightUnit?: string | null;
-  // weight?: string | null;
-  // height?: string | null;
-  // imageUri?: string | null;
+  preferences?: string | null;
+  weightUnit?: string | null;
+  heightUnit?: string | null;
+  weight?: string | null;
+  height?: string | null;
+  imageUri?: string | null;
   email: string;
   password: string;
   token: string;
+};
+
+export enum PreferencesEnum {
+  CARDIO = 'CARDIO',
+  WEIGHT = 'WEIGHT',
+}
+
+export enum WeightEnum {
+  KG = 'KG',
+  LBS = 'LBS',
+}
+
+export enum HeightEnum {
+  CM = 'CM',
+  INCH = 'INCH',
+}
+
+export type Profile = {
+  preferences: PreferencesEnum | null;
+  weightUnit: WeightEnum | null;
+  heightUnit: HeightEnum | null;
+  weight: number;
+  height: number;
+  imageUri?: string | null;
+  name?: string | null;
 };
 
 export enum ActivityType {
