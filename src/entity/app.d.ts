@@ -1,4 +1,4 @@
-type User = {
+export type User = {
   preferences?: string | null;
   weightUnit?: string | null;
   heightUnit?: string | null;
@@ -10,7 +10,32 @@ type User = {
   token: string;
 };
 
-enum ActivityType {
+export enum PreferencesEnum {
+  CARDIO = 'CARDIO',
+  WEIGHT = 'WEIGHT',
+}
+
+export enum WeightEnum {
+  KG = 'KG',
+  LBS = 'LBS',
+}
+
+export enum HeightEnum {
+  CM = 'CM',
+  INCH = 'INCH',
+}
+
+export type Profile = {
+  preferences: PreferencesEnum | null;
+  weightUnit: WeightEnum | null;
+  heightUnit: HeightEnum | null;
+  weight: number;
+  height: number;
+  imageUri?: string | null;
+  name?: string | null;
+};
+
+export enum ActivityType {
   Walking = 'Walking',
   Yoga = 'Yoga',
   Stretching = 'Stretching',
@@ -24,11 +49,17 @@ enum ActivityType {
 }
 
 // Update the Activity type to use the enum
-type Activity = {
+export type Activity = {
   activityId: string;
   activityType: ActivityType;
   doneAt: Date;
   durationInMinutes: number;
   caloriesBurned: number;
   createdAt: Date;
+}
+
+export type UploadedFile = {
+  fileId: string;
+  fileUri: string;
+  fileThumbnailUri: string;
 }

@@ -1,0 +1,26 @@
+{
+  "$ref": "#/definitions/Types.File",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Types.File": {
+      "additionalProperties": false,
+      "properties": {
+        "fileId": {
+          "type": "string"
+        },
+        "fileThumbnailUri": {
+          "type": "string"
+        },
+        "fileUri": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "fileId",
+        "fileUri",
+        "fileThumbnailUri"
+      ],
+      "type": "object"
+    }
+  }
+}
