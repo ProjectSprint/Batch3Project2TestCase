@@ -34,7 +34,7 @@ export function GetActivityScenario(config, tags, info) {
   const route = config.baseUrl + "/v1/activity";
   const assertHandler = testGetAssert;
 
-  let user = info.user; 
+  let user = info.user;
   if (!isUser(user)) {
     console.warn(`${featureName} needs a valid user`);
     return undefined;
@@ -46,7 +46,8 @@ export function GetActivityScenario(config, tags, info) {
       featureName: featureName,
       route: route,
       headers: {},
-      params: {},
+      params: {
+      },
       expectedCase: {
         ["should return 401"]: (_parsed, res) => res.status === 401,
       },
@@ -60,13 +61,15 @@ export function GetActivityScenario(config, tags, info) {
     featureName: featureName,
     config: config,
     route: route,
-    params: {},
+    params: {
+        limit: 10,
+        offset: 0,
+    },
     headers: { Authorization: user.token },
     currentTestName: "success get product",
     expectedCase: {
           ["should return 200"]: (_parsed, res) => res.status === 200,
-          
-          ["activityId should be string"]: (parsed, _res) => 
+          ["activityId should be string"]: (parsed, _res) =>
             isExists(parsed, "[].activityId", ["string"]),
           ["activityType should be string"]: (parsed, _res) =>
             isExists(parsed, "[].activityType", ["string"]),
@@ -98,7 +101,7 @@ export function PostActivityScenario(config, tags, info) {
   const route = config.baseUrl + "/v1/activity";
   const assertHandler = testPostJsonAssert;
 
-  let user = info.user; 
+  let user = info.user;
   console.log("user", user);
   if (!isUser(user)) {
     console.warn(`${featureName} needs a valid user`);
@@ -145,7 +148,7 @@ export function PostActivityScenario(config, tags, info) {
       tags: {},
     });
 
-    
+
     const testObjects = generateTestObjects(
       {
         activityType: {
@@ -161,7 +164,7 @@ export function PostActivityScenario(config, tags, info) {
         },
       },
       positivePayload
-    );  
+    );
 
     testObjects.forEach((payload) => {
       assertHandler({
@@ -175,7 +178,7 @@ export function PostActivityScenario(config, tags, info) {
         },
         options: [],
         config: config,
-        tags: {},  
+        tags: {},
       });
     });
   }
@@ -190,8 +193,8 @@ export function PostActivityScenario(config, tags, info) {
     currentTestName: "success get product",
     expectedCase: {
           ["should return 201"]: (_parsed, res) => res.status === 201,
-          
-          ["activityId should be string"]: (parsed, _res) => 
+
+          ["activityId should be string"]: (parsed, _res) =>
             isExists(parsed, "activityId", ["string"]),
           ["activityType should be string"]: (parsed, _res) =>
             isExists(parsed, "activityType", ["string"]),
@@ -223,7 +226,7 @@ export function PatchActivityScenario(config, tags, info) {
   const route = config.baseUrl + "/v1/activity/:activityId";
   const assertHandler = testPatchJsonAssert;
 
-  let user = info.user; 
+  let user = info.user;
   if (!isUser(user)) {
     console.warn(`${featureName} needs a valid user`);
     return undefined;
@@ -276,7 +279,7 @@ export function PatchActivityScenario(config, tags, info) {
       tags: {},
     });
 
-    
+
     const testObjects = generateTestObjects(
       {
         activityId: {
@@ -295,7 +298,7 @@ export function PatchActivityScenario(config, tags, info) {
         },
       },
       positivePayload
-    );  
+    );
 
     testObjects.forEach((payload) => {
       assertHandler({
@@ -309,7 +312,7 @@ export function PatchActivityScenario(config, tags, info) {
         },
         options: [],
         config: config,
-        tags: {},  
+        tags: {},
       });
       assertHandler({
         currentTestName: "activityId not found",
@@ -322,7 +325,7 @@ export function PatchActivityScenario(config, tags, info) {
         },
         options: [],
         config: config,
-        tags: {},  
+        tags: {},
       });
     });
   }
@@ -337,8 +340,8 @@ export function PatchActivityScenario(config, tags, info) {
     currentTestName: "success post activity",
     expectedCase: {
           ["should return 200"]: (_parsed, res) => res.status === 200,
-          
-          ["activityId should be string"]: (parsed, _res) => 
+
+          ["activityId should be string"]: (parsed, _res) =>
             isExists(parsed, "activityId", ["string"]),
           ["activityType should be string"]: (parsed, _res) =>
             isExists(parsed, "activityType", ["string"]),
@@ -370,7 +373,7 @@ export function DeleteActivityScenario(config, tags, info) {
   const route = config.baseUrl + "/v1/activity/:activityId";
   const assertHandler = testDeleteAssert;
 
-  let user = info.user; 
+  let user = info.user;
   if (!isUser(user)) {
     console.warn(`${featureName} needs a valid user`);
     return undefined;
@@ -401,7 +404,7 @@ export function DeleteActivityScenario(config, tags, info) {
       featureName: featureName,
       route: route,
       params: {},
-      headers: { 
+      headers: {
         Authorization: user.token,
         Query: "kan"
       },

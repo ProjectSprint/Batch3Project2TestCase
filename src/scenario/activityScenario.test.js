@@ -6,6 +6,7 @@ import { promisify } from "node:util";
 import child_process from "node:child_process";
 import assert from "node:assert";
 import { isValidDate } from "../helper/assertion.js";
+import url from "url";
 
 const exec = promisify(child_process.exec);
 /**
@@ -47,7 +48,7 @@ const validActivityId = ["act1", "act2", "act3"];
 let activityIdCount = 1;
 
 /** @type {string[]} */
-const availableActivity = [];
+const availableActivity = ["1","2"];
 
 /** @type {string[]} */
 s.addRoute("POST", "/v1/activity", async (req, res) => {
@@ -55,7 +56,7 @@ s.addRoute("POST", "/v1/activity", async (req, res) => {
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
-    ) 
+    )
     {
       const body = await s.getRequestBody(req);
       const validate = postSchema.safeParse(body);
@@ -138,7 +139,7 @@ s.addRoute("GET", "/v1/activity", async (req, res) => {
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
-      s.sendJsonResponse(res, 200, 
+      s.sendJsonResponse(res, 200,
           [
             {
               activityId: "",
@@ -171,22 +172,31 @@ s.addRoute("GET", "/v1/activity", async (req, res) => {
 /** @type {string[]} */
 s.addRoute("DELETE", "/v1/activity/:activityId", async (req, res) => {
   try {
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
-    ) { 
-      if (!availableActivity.includes(req.headers.query)) {
-        s.sendJsonResponse(res, 404, { status: "failed" });
-        return;
-      }
-      s.sendJsonResponse(res, 200, {});
-      
-    } else {
-      s.sendJsonResponse(res, 401, { status: "failed" });
+    // Check authorization
+    if (!req.headers.authorization?.startsWith("Bearer")) {
+      return s.sendJsonResponse(res, 401, { status: "failed" });
     }
-    return;
+
+    // Extract activityId from URL path
+    if (!req.url) {
+      return s.sendJsonResponse(res, 400, { status: "failed" });
+    }
+
+    const parsedUrl = url.parse(req.url, true);
+    const pathSegments = parsedUrl.pathname?.split("/").filter(Boolean) || [];
+
+    // For "/v1/activity/:activityId", the activityId should be at index 2
+    const activityId = pathSegments[2];
+
+    if (!activityId || !availableActivity.includes(activityId)) {
+      return s.sendJsonResponse(res, 404, { status: "failed" });
+    }
+
+    return s.sendJsonResponse(res, 200, {});
+
   } catch (error) {
-    s.sendJsonResponse(res, 500, { status: "failed" });
+    console.error("Error in DELETE /v1/activity/:activityId:", error);
+    return s.sendJsonResponse(res, 500, { status: "failed" });
   }
 });
 
@@ -224,19 +234,24 @@ test("Activity Scenario", async (go) => {
     const info = {
       user: {
         email: "asdf@adf.com",
-        password: "asraf123",
+        password: 'asraf123',
         token: "Bearer asraf123",
       },
     };
     await assert.doesNotReject(
-      exec(`${process.env.K6_PATH} run src/main.js`, {
-        env: {
-          BASE_URL: `http://127.0.0.1:${serverPort}`,
-          MOCK_INFO: `${JSON.stringify(info)}`,
-          RUN_UNIT_TEST: "true",
-          SCENARIO_NAME: "GetActivityScenario",
-        },
-      }),
+      async () =>{
+        const result = await exec(`${process.env.K6_PATH} run src/main.js`, {
+          env: {
+            BASE_URL: `http://127.0.0.1:${serverPort}`,
+            MOCK_INFO: `${JSON.stringify(info)}`,
+            RUN_UNIT_TEST: "true",
+            SCENARIO_NAME: "GetActivityScenario",
+            DEBUG: "true",
+          },
+        })
+        console.log("k6 stdout", result.stdout)
+        console.log("k6 stderr", result.stderr)
+      },
       console.error,
     );
   });
