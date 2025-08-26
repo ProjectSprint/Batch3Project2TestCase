@@ -11,28 +11,52 @@ import url from "url";
 const exec = promisify(child_process.exec);
 /**
  * @type {string[]}
-*/
-const activities = ["Walking", "Yoga", "Stretching", "Cycling",
-  "Swimming", "Dancing", "Hiking", "Running",
-  "HIIT", "JumpRope",
-]
+ */
+const activities = [
+  "Walking",
+  "Yoga",
+  "Stretching",
+  "Cycling",
+  "Swimming",
+  "Dancing",
+  "Hiking",
+  "Running",
+  "HIIT",
+  "JumpRope",
+];
 const postSchema = z.object({
-  activityType: z.enum(["Walking", "Yoga", "Stretching", "Cycling",
-  "Swimming", "Dancing", "Hiking", "Running",
-  "HIIT", "JumpRope",
+  activityType: z.enum([
+    "Cycling",
+    "Dancing",
+    "HIIT",
+    "Hiking",
+    "JumpRope",
+    "Running",
+    "Stretching",
+    "Swimming",
+    "Walking",
+    "Yoga",
   ]),
   doneAt: z.string(),
-  durationInMinutes: z.number().min(1)
+  durationInMinutes: z.number().min(1),
 });
 
 const patchSchema = z.object({
   activityId: z.string(),
-  activityType: z.enum(["Walking", "Yoga", "Stretching", "Cycling",
-  "Swimming", "Dancing", "Hiking", "Running",
-  "HIIT", "JumpRope",
+  activityType: z.enum([
+    "Walking",
+    "Yoga",
+    "Stretching",
+    "Cycling",
+    "Swimming",
+    "Dancing",
+    "Hiking",
+    "Running",
+    "HIIT",
+    "JumpRope",
   ]),
   doneAt: z.string(),
-  durationInMinutes: z.number().min(1)
+  durationInMinutes: z.number().min(1),
 });
 
 const deleteSchema = z.object({
@@ -48,7 +72,7 @@ const validActivityId = ["act1", "act2", "act3"];
 let activityIdCount = 1;
 
 /** @type {string[]} */
-const availableActivity = ["1","2"];
+const availableActivity = ["1", "2"];
 
 /** @type {string[]} */
 s.addRoute("POST", "/v1/activity", async (req, res) => {
@@ -56,8 +80,7 @@ s.addRoute("POST", "/v1/activity", async (req, res) => {
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
-    )
-    {
+    ) {
       const body = await s.getRequestBody(req);
       const validate = postSchema.safeParse(body);
       if (validate.success) {
@@ -66,7 +89,7 @@ s.addRoute("POST", "/v1/activity", async (req, res) => {
           return;
         }
 
-        let activityId = "act" +  activityIdCount++;
+        let activityId = "act" + activityIdCount++;
         availableActivity.push(activityId);
 
         s.sendJsonResponse(res, 201, {
@@ -78,7 +101,6 @@ s.addRoute("POST", "/v1/activity", async (req, res) => {
           createdAt: "",
           updatedAt: "",
         });
-
       } else {
         s.sendJsonResponse(res, 400, { status: "failed" });
       }
@@ -107,7 +129,7 @@ s.addRoute("PATCH", "/v1/activity/:activityId", async (req, res) => {
         }
 
         if (!isValidDate(validate.data.doneAt)) {
-          s.sendJsonResponse(res, 400, { status: "failed"});
+          s.sendJsonResponse(res, 400, { status: "failed" });
           return;
         }
 
@@ -139,27 +161,26 @@ s.addRoute("GET", "/v1/activity", async (req, res) => {
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
-      s.sendJsonResponse(res, 200,
-          [
-            {
-              activityId: "",
-              activityType: "Yoga",
-              doneAt: "",
-              durationInMinutes: 1,
-              caloriesBurned: 5,
-              createdAt: "",
-              updatedAt: "",
-            },
-            {
-              activityId: "",
-              activityType: "Walking",
-              doneAt: "",
-              durationInMinutes: 1,
-              caloriesBurned: 5,
-              createdAt: "",
-              updatedAt: "",
-            },
-          ]);
+      s.sendJsonResponse(res, 200, [
+        {
+          activityId: "",
+          activityType: "Yoga",
+          doneAt: "",
+          durationInMinutes: 1,
+          caloriesBurned: 5,
+          createdAt: "",
+          updatedAt: "",
+        },
+        {
+          activityId: "",
+          activityType: "Walking",
+          doneAt: "",
+          durationInMinutes: 1,
+          caloriesBurned: 5,
+          createdAt: "",
+          updatedAt: "",
+        },
+      ]);
     } else {
       s.sendJsonResponse(res, 401, { status: "failed" });
     }
@@ -193,7 +214,6 @@ s.addRoute("DELETE", "/v1/activity/:activityId", async (req, res) => {
     }
 
     return s.sendJsonResponse(res, 200, {});
-
   } catch (error) {
     console.error("Error in DELETE /v1/activity/:activityId:", error);
     return s.sendJsonResponse(res, 500, { status: "failed" });
@@ -234,26 +254,23 @@ test("Activity Scenario", async (go) => {
     const info = {
       user: {
         email: "asdf@adf.com",
-        password: 'asraf123',
+        password: "asraf123",
         token: "Bearer asraf123",
       },
     };
-    await assert.doesNotReject(
-      async () =>{
-        const result = await exec(`${process.env.K6_PATH} run src/main.js`, {
-          env: {
-            BASE_URL: `http://127.0.0.1:${serverPort}`,
-            MOCK_INFO: `${JSON.stringify(info)}`,
-            RUN_UNIT_TEST: "true",
-            SCENARIO_NAME: "GetActivityScenario",
-            DEBUG: "true",
-          },
-        })
-        console.log("k6 stdout", result.stdout)
-        console.log("k6 stderr", result.stderr)
-      },
-      console.error,
-    );
+    await assert.doesNotReject(async () => {
+      const result = await exec(`${process.env.K6_PATH} run src/main.js`, {
+        env: {
+          BASE_URL: `http://127.0.0.1:${serverPort}`,
+          MOCK_INFO: `${JSON.stringify(info)}`,
+          RUN_UNIT_TEST: "true",
+          SCENARIO_NAME: "GetActivityScenario",
+          DEBUG: "true",
+        },
+      });
+      console.log("k6 stdout", result.stdout);
+      console.log("k6 stderr", result.stderr);
+    }, console.error);
   });
 
   go.test("PatchActivityScenario should return 0 exit code", async () => {
@@ -299,5 +316,4 @@ test("Activity Scenario", async (go) => {
       console.error,
     );
   });
-
 });

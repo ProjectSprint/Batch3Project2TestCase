@@ -6,6 +6,7 @@
   "main": "main.js",
   "scripts": {
     "lint:fix": "eslint --fix",
+    "format": "biome format --write",
     "generateSchema": "typescript-to-json-schema --path ./src/entity/**/*.ts"
   },
   "repository": {
@@ -19,6 +20,7 @@
   },
   "homepage": "https://github.com/ProjectSprint/Batch3Project1TestCase#readme",
   "devDependencies": {
+    "@biomejs/biome": "2.2.2",
     "@eslint/js": "^9.18.0",
     "@types/node": "^22.13.1",
     "eslint": "^9.18.0",

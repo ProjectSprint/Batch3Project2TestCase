@@ -5,7 +5,9 @@ const activitySchema = open("../schemas/activity.schema.json");
 const isValid = createValidator(activitySchema);
 
 // hasil open adalah string, replace aja kebutuhannya apa
-const isProductsValid = createValidator(activitySchema.replace("#/definitions/Activity", "#/definitions/Activities"));
+const isProductsValid = createValidator(
+  activitySchema.replace("#/definitions/Activity", "#/definitions/Activities"),
+);
 
 /**
  * Asserts that a value is a valid User object
@@ -36,7 +38,6 @@ export function isActivities(value) {
   }
   throw res.errors;
 }
-
 
 /**
  * @param {import("k6/http").RefinedResponse<any>} res
@@ -75,7 +76,6 @@ export function getActivitites(res, positivePayload, featureName) {
   try {
     const jsonResult = res.json();
     if (jsonResult && typeof jsonResult == "object") {
-
       // obj = combine(jsonResult, positivePayload);
 
       obj = jsonResult;

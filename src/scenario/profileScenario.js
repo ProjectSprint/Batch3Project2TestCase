@@ -1,17 +1,13 @@
 import { getProfile } from "../assertion/profileAssertion.js";
 import { isUser } from "../assertion/userAssertion.js";
 import { isEqualWith, isExists } from "../helper/assertion.js";
-import { 
-  generateRandomImageUrl, 
+import {
+  generateRandomImageUrl,
   generateRandomName,
-  generateRandomNumber, 
-  generateTestObjects 
+  generateRandomNumber,
+  generateTestObjects,
 } from "../helper/generator.js";
-import { 
-  testGetAssert,
-  testPatchJsonAssert,
-} from "../helper/testRequest.js";
-
+import { testGetAssert, testPatchJsonAssert } from "../helper/testRequest.js";
 
 /**
  * @type {import("src/types/scenario.js").Scenario<import("src/entity/app.js").Profile | undefined>}
@@ -113,15 +109,16 @@ export function PatchProfileScenario(config, tags, info) {
     console.warn(`${featureName} needs a valid user`);
     return undefined;
   }
-  
+
   const positivePayload = {
-    preference: preferencesEnum[Math.floor(Math.random() * preferencesEnum.length)],
-    weightUnit: weightEnum[Math.floor(Math.random() * weightEnum.length)],  
+    preference:
+      preferencesEnum[Math.floor(Math.random() * preferencesEnum.length)],
+    weightUnit: weightEnum[Math.floor(Math.random() * weightEnum.length)],
     heightUnit: heightEnum[Math.floor(Math.random() * heightEnum.length)],
     weight: generateRandomNumber(11, 999),
     height: generateRandomNumber(4, 249),
     name: generateRandomName(),
-    imageUri: generateRandomImageUrl()
+    imageUri: generateRandomImageUrl(),
   };
 
   if (config.runNegativeCase) {
@@ -189,8 +186,8 @@ export function PatchProfileScenario(config, tags, info) {
         },
         imageUri: {
           type: "string",
-          notNull: false
-        }
+          notNull: false,
+        },
       },
       positivePayload,
     );
@@ -234,7 +231,6 @@ export function PatchProfileScenario(config, tags, info) {
         isExists(parsed, "name", ["string"]),
       ["imageUri should be string"]: (parsed, _res) =>
         isExists(parsed, "imageUri", ["string"]),
-
     },
     options: [],
     config: config,

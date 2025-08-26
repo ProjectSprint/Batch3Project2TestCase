@@ -34,7 +34,7 @@ s.addRoute("GET", "/v1/user", async (req, res) => {
         height: 10,
         email: "name@name.com",
         name: "",
-        imageUri: ""
+        imageUri: "",
       });
     } else {
       s.sendJsonResponse(res, 401, { status: "failed" });
@@ -54,7 +54,7 @@ s.addRoute("PATCH", "/v1/user", async (req, res) => {
     ) {
       const body = await s.getRequestBody(req);
       const validate = profilePutSchema.safeParse(body);
-      
+
       if (validate.success) {
         s.sendJsonResponse(res, 200, {
           preference: "",
@@ -64,7 +64,7 @@ s.addRoute("PATCH", "/v1/user", async (req, res) => {
           height: 10,
           email: "name@name.com",
           name: "",
-          imageUri: ""
+          imageUri: "",
         });
       } else {
         s.sendJsonResponse(res, 400, { status: "failed" });

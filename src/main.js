@@ -1,7 +1,15 @@
 import exec from "k6/execution";
 import { LoginScenario, RegisterScenario } from "./scenario/loginScenario.js";
-import { GetProfileScenario, PatchProfileScenario } from "./scenario/profileScenario.js";
-import { DeleteActivityScenario, GetActivityScenario, PatchActivityScenario, PostActivityScenario } from "./scenario/activityScenario.js";
+import {
+  GetProfileScenario,
+  PatchProfileScenario,
+} from "./scenario/profileScenario.js";
+import {
+  DeleteActivityScenario,
+  GetActivityScenario,
+  PatchActivityScenario,
+  PostActivityScenario,
+} from "./scenario/activityScenario.js";
 
 export const options = {
   vus: 1,
@@ -27,7 +35,7 @@ const scenarios = {
   GetActivityScenario: GetActivityScenario,
   PostActivityScenario: PostActivityScenario,
   PatchActivityScenario: PatchActivityScenario,
-  DeleteActivityScenario: DeleteActivityScenario
+  DeleteActivityScenario: DeleteActivityScenario,
 };
 
 export default function () {

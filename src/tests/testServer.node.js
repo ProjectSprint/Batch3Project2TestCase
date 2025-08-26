@@ -1,4 +1,3 @@
-// @ts-check
 import http from "http";
 import { URL } from "url";
 import getPort from "get-port";
@@ -72,6 +71,22 @@ class TestServer {
       );
       res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     }
+  }
+
+  /**
+   * Parse JSON body from incoming request
+   * @param {http.IncomingMessage} req
+   * @param {string} separator
+   * @param {number} index
+   * @returns {string}
+   */
+  getGetPathValue(req, separator, index) {
+    if (req.url) {
+      const fullUrl = new URL(req.url, `http://${req.headers.host}`);
+      const pathnames = fullUrl.pathname.split(separator);
+      return pathnames[index];
+    }
+    return "";
   }
 
   /**

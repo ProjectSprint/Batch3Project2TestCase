@@ -1,8 +1,27 @@
 import { isUser } from "../assertion/userAssertion.js";
 import { getActivitites, getActivity } from "../assertion/activityAssertion.js";
-import { isEqual, isEqualWith, isEveryItemDifferent, isExists, isTotalDataInRange, isValidDate, traverseObject } from "../helper/assertion.js";
-import { clone, combine, generateRandomName, generateRandomNumber, generateTestObjects } from "../helper/generator.js";
-import { testDeleteAssert, testGetAssert, testPatchJsonAssert, testPostJsonAssert } from "../helper/testRequest.js";
+import {
+  isEqual,
+  isEqualWith,
+  isEveryItemDifferent,
+  isExists,
+  isTotalDataInRange,
+  isValidDate,
+  traverseObject,
+} from "../helper/assertion.js";
+import {
+  clone,
+  combine,
+  generateRandomName,
+  generateRandomNumber,
+  generateTestObjects,
+} from "../helper/generator.js";
+import {
+  testDeleteAssert,
+  testGetAssert,
+  testPatchJsonAssert,
+  testPostJsonAssert,
+} from "../helper/testRequest.js";
 
 /** @type {Object<string, number>} */
 const activitiesCalories = {
@@ -15,16 +34,24 @@ const activitiesCalories = {
   Hiking: 10,
   Running: 10,
   HIIT: 10,
-  JumpRope: 10
+  JumpRope: 10,
 };
 
 /**
  * @type {string[]}
-*/
-const activities = ["Walking", "Yoga", "Stretching", "Cycling",
-  "Swimming", "Dancing", "Hiking", "Running",
-  "HIIT", "JumpRope",
-]
+ */
+const activities = [
+  "Walking",
+  "Yoga",
+  "Stretching",
+  "Cycling",
+  "Swimming",
+  "Dancing",
+  "Hiking",
+  "Running",
+  "HIIT",
+  "JumpRope",
+];
 
 /**
  * @type {import("src/types/scenario.js").Scenario<import("src/entity/app.js").Activity[] | undefined>}
@@ -46,8 +73,7 @@ export function GetActivityScenario(config, tags, info) {
       featureName: featureName,
       route: route,
       headers: {},
-      params: {
-      },
+      params: {},
       expectedCase: {
         ["should return 401"]: (_parsed, res) => res.status === 401,
       },
@@ -62,34 +88,33 @@ export function GetActivityScenario(config, tags, info) {
     config: config,
     route: route,
     params: {
-        limit: 10,
-        offset: 0,
+      limit: 10,
+      offset: 0,
     },
     headers: { Authorization: user.token },
     currentTestName: "success get product",
     expectedCase: {
-          ["should return 200"]: (_parsed, res) => res.status === 200,
-          ["activityId should be string"]: (parsed, _res) =>
-            isExists(parsed, "[].activityId", ["string"]),
-          ["activityType should be string"]: (parsed, _res) =>
-            isExists(parsed, "[].activityType", ["string"]),
-          ["doneAt should be string"]: (parsed, _res) =>
-            isExists(parsed, "[].doneAt", ["string"]),
-          ["durationInMinutes should be number"]: (parsed, _res) =>
-            isExists(parsed, "[].durationInMinutes", ["number"]),
-          ["createdAt should be string"]: (parsed, _res) =>
-            isExists(parsed, "[].createdAt", ["string"]),
-        },
+      ["should return 200"]: (_parsed, res) => res.status === 200,
+      ["activityId should be string"]: (parsed, _res) =>
+        isExists(parsed, "[].activityId", ["string"]),
+      ["activityType should be string"]: (parsed, _res) =>
+        isExists(parsed, "[].activityType", ["string"]),
+      ["doneAt should be string"]: (parsed, _res) =>
+        isExists(parsed, "[].doneAt", ["string"]),
+      ["durationInMinutes should be number"]: (parsed, _res) =>
+        isExists(parsed, "[].durationInMinutes", ["number"]),
+      ["createdAt should be string"]: (parsed, _res) =>
+        isExists(parsed, "[].createdAt", ["string"]),
+    },
     tags: {},
   });
-
 
   if (positiveResult.isSuccess) {
     return getActivitites(positiveResult.res, {}, featureName);
   } else {
     console.warn(
-        `${featureName} | Skipping getProduct due to failed assertions.`,
-      );
+      `${featureName} | Skipping getProduct due to failed assertions.`,
+    );
     return undefined;
   }
 }
@@ -109,7 +134,8 @@ export function PostActivityScenario(config, tags, info) {
   }
 
   const duration = generateRandomNumber(2, 100);
-  const choosenActivity = activities[generateRandomNumber(0, activities.length - 1)];
+  const choosenActivity =
+    activities[generateRandomNumber(0, activities.length - 1)];
   const calorieBurned = duration * activitiesCalories[choosenActivity];
 
   const positivePayload = {
@@ -148,22 +174,21 @@ export function PostActivityScenario(config, tags, info) {
       tags: {},
     });
 
-
     const testObjects = generateTestObjects(
       {
         activityType: {
           type: "string",
-          enum: activities
+          enum: activities,
         },
         doneAt: {
-          type: "string"
+          type: "string",
         },
         durationInMinutes: {
           type: "number",
           min: 1,
         },
       },
-      positivePayload
+      positivePayload,
     );
 
     testObjects.forEach((payload) => {
@@ -192,30 +217,30 @@ export function PostActivityScenario(config, tags, info) {
     headers: { Authorization: user.token },
     currentTestName: "success get product",
     expectedCase: {
-          ["should return 201"]: (_parsed, res) => res.status === 201,
+      ["should return 201"]: (_parsed, res) => res.status === 201,
 
-          ["activityId should be string"]: (parsed, _res) =>
-            isExists(parsed, "activityId", ["string"]),
-          ["activityType should be string"]: (parsed, _res) =>
-            isExists(parsed, "activityType", ["string"]),
-          ["doneAt should be string"]: (parsed, _res) =>
-            isExists(parsed, "doneAt", ["string"]),
-          ["durationInMinutes should be number"]: (parsed, _res) =>
-            isExists(parsed, "durationInMinutes", ["number"]),
-          ["createdAt should be string"]: (parsed, _res) =>
-            isExists(parsed, "createdAt", ["string"]),
-        },
+      ["activityId should be string"]: (parsed, _res) =>
+        isExists(parsed, "activityId", ["string"]),
+      ["activityType should be string"]: (parsed, _res) =>
+        isExists(parsed, "activityType", ["string"]),
+      ["doneAt should be string"]: (parsed, _res) =>
+        isExists(parsed, "doneAt", ["string"]),
+      ["durationInMinutes should be number"]: (parsed, _res) =>
+        isExists(parsed, "durationInMinutes", ["number"]),
+      ["createdAt should be string"]: (parsed, _res) =>
+        isExists(parsed, "createdAt", ["string"]),
+    },
     tags: {},
   });
 
   if (positiveResult.isSuccess) {
-      return getActivity(positiveResult.res, {}, featureName);
-    } else {
-      console.warn(
-        `${featureName} | Skipping getActivity due to failed assertions.`,
-      );
-      return undefined;
-    }
+    return getActivity(positiveResult.res, {}, featureName);
+  } else {
+    console.warn(
+      `${featureName} | Skipping getActivity due to failed assertions.`,
+    );
+    return undefined;
+  }
 }
 
 /**
@@ -238,7 +263,8 @@ export function PatchActivityScenario(config, tags, info) {
   const activityId = info.activityId;
 
   const duration = generateRandomNumber(2, 100);
-  const choosenActivity = activities[generateRandomNumber(0, activities.length - 1)];
+  const choosenActivity =
+    activities[generateRandomNumber(0, activities.length - 1)];
   const calorieBurned = duration * activitiesCalories[choosenActivity];
 
   const positivePayload = {
@@ -279,25 +305,24 @@ export function PatchActivityScenario(config, tags, info) {
       tags: {},
     });
 
-
     const testObjects = generateTestObjects(
       {
         activityId: {
-          type: "string"
+          type: "string",
         },
         activityType: {
           type: "string",
-          enum: activities
+          enum: activities,
         },
         doneAt: {
-          type: "string"
+          type: "string",
         },
         durationInMinutes: {
           type: "number",
           min: 1,
         },
       },
-      positivePayload
+      positivePayload,
     );
 
     testObjects.forEach((payload) => {
@@ -339,30 +364,30 @@ export function PatchActivityScenario(config, tags, info) {
     headers: { Authorization: user.token },
     currentTestName: "success post activity",
     expectedCase: {
-          ["should return 200"]: (_parsed, res) => res.status === 200,
+      ["should return 200"]: (_parsed, res) => res.status === 200,
 
-          ["activityId should be string"]: (parsed, _res) =>
-            isExists(parsed, "activityId", ["string"]),
-          ["activityType should be string"]: (parsed, _res) =>
-            isExists(parsed, "activityType", ["string"]),
-          ["doneAt should be string"]: (parsed, _res) =>
-            isExists(parsed, "doneAt", ["string"]),
-          ["durationInMinutes should be number"]: (parsed, _res) =>
-            isExists(parsed, "durationInMinutes", ["number"]),
-          ["createdAt should be string"]: (parsed, _res) =>
-            isExists(parsed, "createdAt", ["string"]),
-        },
+      ["activityId should be string"]: (parsed, _res) =>
+        isExists(parsed, "activityId", ["string"]),
+      ["activityType should be string"]: (parsed, _res) =>
+        isExists(parsed, "activityType", ["string"]),
+      ["doneAt should be string"]: (parsed, _res) =>
+        isExists(parsed, "doneAt", ["string"]),
+      ["durationInMinutes should be number"]: (parsed, _res) =>
+        isExists(parsed, "durationInMinutes", ["number"]),
+      ["createdAt should be string"]: (parsed, _res) =>
+        isExists(parsed, "createdAt", ["string"]),
+    },
     tags: {},
   });
 
   if (positiveResult.isSuccess) {
-      return getActivity(positiveResult.res, {}, featureName);
-    } else {
-      console.warn(
-        `${featureName} | Skipping getActivity due to failed assertions.`,
-      );
-      return undefined;
-    }
+    return getActivity(positiveResult.res, {}, featureName);
+  } else {
+    console.warn(
+      `${featureName} | Skipping getActivity due to failed assertions.`,
+    );
+    return undefined;
+  }
 }
 
 /**
@@ -416,24 +441,23 @@ export function DeleteActivityScenario(config, tags, info) {
 
   // ---- Positive Case ----
   const positiveResult = assertHandler({
-      currentTestName: "valid payload",
-      featureName: featureName,
-      route: route,
-      params: {},
-      headers: { Authorization: user.token, Query: activityId},
-      expectedCase: {
-        ["should return 200"]: (_parsed, res) => res.status === 200,
-      },
-      config: config,
-      tags: {},
-    });
+    currentTestName: "valid payload",
+    featureName: featureName,
+    route: route,
+    params: {},
+    headers: { Authorization: user.token, Query: activityId },
+    expectedCase: {
+      ["should return 200"]: (_parsed, res) => res.status === 200,
+    },
+    config: config,
+    tags: {},
+  });
   if (positiveResult.isSuccess) {
-      return 200;
-    } else {
-      console.warn(
-        `${featureName} | Skipping return 200 due to failed assertions.`,
-      );
-      return undefined;
-    }
+    return 200;
+  } else {
+    console.warn(
+      `${featureName} | Skipping return 200 due to failed assertions.`,
+    );
+    return undefined;
+  }
 }
-

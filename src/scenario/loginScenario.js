@@ -28,7 +28,7 @@ export function LoginScenario(config, tags, info) {
     email: registeredUserEmail[0].email,
     password: registeredUserEmail[0].password,
   };
-  
+
   if (config.runNegativeCase) {
     assertHandler({
       currentTestName: "empty body",
@@ -113,7 +113,9 @@ export function LoginScenario(config, tags, info) {
 /**
  * @type {import("src/entity/app.js").User[]}
  */
-let registeredUserEmail = [{email: "mas@gmail.com", password: "password", token: ""}];
+let registeredUserEmail = [
+  { email: "mas@gmail.com", password: "password", token: "" },
+];
 
 /**
  * @type {import("src/types/scenario.js").Scenario<import("src/entity/app.js").User | undefined>}
@@ -207,14 +209,14 @@ export function RegisterScenario(config, tags, info) {
       tags: tags,
     });
   }
-  
+
   if (registerResult.isSuccess) {
-      registeredUserEmail.push({
+    registeredUserEmail.push({
       email: positivePayload.email,
       token: "Bearer kunciGembokOmaheBapak",
       password: positivePayload.password,
     });
-    
+
     const usr = getUser(registerResult.res, positivePayload, featureName);
     return usr;
   } else {
