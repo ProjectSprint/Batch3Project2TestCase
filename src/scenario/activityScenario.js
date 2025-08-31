@@ -398,7 +398,6 @@ export function DeleteActivityScenario(config, tags, info) {
       tags: {},
     });
 
-    // karena belum tau caranya kirim parameter :activityId. Jadi minjem headers agar bisa ditangkap di .test.js
     assertHandler({
       currentTestName: "activityId not found",
       featureName: featureName,
@@ -406,7 +405,6 @@ export function DeleteActivityScenario(config, tags, info) {
       params: {},
       headers: {
         Authorization: user.token,
-        Query: "kan"
       },
       expectedCase: {
         ["should return 404"]: (_parsed, res) => res.status === 404,
