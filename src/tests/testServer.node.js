@@ -74,19 +74,118 @@ class TestServer {
   }
 
   /**
-   * Parse JSON body from incoming request
+   * Extract value from request, ex:
+   * // request comes from `http://localhost/test/value`
+   * getPathValue(req, 0) => return "test"
+   * getPathValue(req, 1) => return "value"
    * @param {http.IncomingMessage} req
-   * @param {string} separator
    * @param {number} index
    * @returns {string}
    */
-  getGetPathValue(req, separator, index) {
+  getGetPathValue(req, index) {
     if (req.url) {
-      const fullUrl = new URL(req.url, `http://${req.headers.host}`);
-      const pathnames = fullUrl.pathname.split(separator);
-      return pathnames[index];
+      const pathnames = req.url.split("/");
+      return this.decodeURIComponentManual(pathnames[index]);
     }
     return "";
+  }
+
+  /**
+   * Extract parameters from a request
+   * @param {http.IncomingMessage} req
+   * @returns {Object}
+   */
+  /**
+   * Manually parse query parameters from URL string
+   * @param {http.IncomingMessage} url - The full URL from req.url
+   * @returns {{ [key: string]: string | string[] }} Parsed query parameters
+   */
+  parseQueryParams(url) {
+    /**
+     * @type {{ [key: string]: string | string[] }}
+     */
+    const params = {};
+
+    if (!url.url) return {};
+
+    // Find the question mark
+    const queryStart = url.url.indexOf("?");
+    if (queryStart === -1) return params; // No query string
+
+    // Get everything after the ?
+    const queryString = url.url.substring(queryStart + 1);
+
+    // Split by & to get key=value pairs
+    const pairs = queryString.split("&");
+
+    for (let i = 0; i < pairs.length; i++) {
+      const pair = pairs[i];
+      if (!pair) continue; // Skip empty pairs
+
+      // Find the = sign
+      const equalIndex = pair.indexOf("=");
+
+      let key, value;
+      if (equalIndex === -1) {
+        // No = sign, treat as key with empty value
+        key = pair;
+        value = "";
+      } else {
+        key = pair.substring(0, equalIndex);
+        value = pair.substring(equalIndex + 1);
+      }
+
+      // Decode URL-encoded characters manually
+      key = this.decodeURIComponentManual(key);
+      value = this.decodeURIComponentManual(value);
+
+      // Handle multiple values for same key (convert to array)
+      if (params[key] !== undefined) {
+        let currentVal = params[key];
+        if (Array.isArray(currentVal)) {
+          currentVal.push(value);
+        } else {
+          currentVal = [currentVal, value];
+          params[key] = currentVal;
+        }
+      } else {
+        params[key] = value;
+      }
+    }
+
+    return params;
+  }
+
+  /**
+   * Manually decode URL-encoded characters (simplified version)
+   * @param {string} str
+   * @returns {string}
+   */
+  decodeURIComponentManual(str) {
+    // Replace + with spaces (common in form data)
+    str = str.replace(/\+/g, " ");
+
+    // Handle % encoding
+    let result = "";
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === "%" && i + 2 < str.length) {
+        // Get the two hex digits after %
+        const hexCode = str.substring(i + 1, i + 3);
+
+        // Convert hex to decimal then to character
+        const charCode = parseInt(hexCode, 16);
+        if (!isNaN(charCode)) {
+          result += String.fromCharCode(charCode);
+          i += 2; // Skip the two hex digits
+        } else {
+          result += str[i]; // Invalid encoding, keep as is
+        }
+      } else {
+        result += str[i];
+      }
+    }
+
+    return result;
   }
 
   /**

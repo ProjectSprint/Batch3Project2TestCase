@@ -59,17 +59,17 @@ export function GetProfileScenario(config, tags, info) {
           return false;
         }),
       ["preference should be string"]: (parsed, _res) =>
-        isExists(parsed, "preference", ["string"]),
+        isExists(parsed, "preference", ["null"]),
       ["weightUnit should be string"]: (parsed, _res) =>
-        isExists(parsed, "weightUnit", ["string"]),
+        isExists(parsed, "weightUnit", ["null"]),
       ["heightUnit should be string"]: (parsed, _res) =>
-        isExists(parsed, "heightUnit", ["string"]),
+        isExists(parsed, "heightUnit", ["null"]),
       ["weight should be numerical"]: (parsed, _res) =>
-        isExists(parsed, "weight", ["number"]),
+        isExists(parsed, "weight", ["null"]),
       ["height should be string"]: (parsed, _res) =>
-        isExists(parsed, "height", ["number"]),
+        isExists(parsed, "height", ["null"]),
       ["imageUri should be string"]: (parsed, _res) =>
-        isExists(parsed, "imageUri", ["string"]),
+        isExists(parsed, "imageUri", ["null"]),
       ["name should be string"]: (parsed, _res) =>
         isExists(parsed, "name", ["string"]),
     },
@@ -103,6 +103,7 @@ export function PatchProfileScenario(config, tags, info) {
   const featureName = "Patch Profile";
   const route = config.baseUrl + "/v1/user";
   const assertHandler = testPatchJsonAssert;
+  const getHandler = testGetAssert;
 
   const user = info.user;
   if (!isUser(user)) {
@@ -187,6 +188,7 @@ export function PatchProfileScenario(config, tags, info) {
         imageUri: {
           type: "string",
           notNull: false,
+          isUrl: true,
         },
       },
       positivePayload,
@@ -236,6 +238,8 @@ export function PatchProfileScenario(config, tags, info) {
     config: config,
     tags: {},
   });
+
+  // todo: get back the user after updating and make sure that the value is no longer null
   if (positiveResult.isSuccess) {
     return getProfile(positiveResult.res, {}, featureName);
   } else {

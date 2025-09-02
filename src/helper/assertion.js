@@ -163,12 +163,12 @@ export function isEveryItemContain(parsedJson, query, searchStr) {
  * Checks whether the parsed JSON has the data that the query asks and matches any of the expected types.
  * @param {import("k6").JSONValue} parsedJson - The pre-parsed JSON object.
  * @param {string} query - The query path to extract values.
- * @param {Array<'string'|'number'|'object'|'boolean'|'array'|null>} expectedTypes - Allowed types ('array' added for clarity).
+ * @param {Array<'string'|'number'|'object'|'boolean'|'array'|'null'>} expectedTypes - Allowed types ('array' added for clarity).
  * @returns {boolean} - True if all found values match one of the expected types, false otherwise or on error/null input.
  */
 export function isExists(parsedJson, query, expectedTypes) {
-  if (parsedJson === null && !expectedTypes.includes(null)) return false;
-  if (parsedJson === null && expectedTypes.includes(null)) {
+  if (parsedJson === null && !expectedTypes.includes("null")) return false;
+  if (parsedJson === null && expectedTypes.includes("null")) {
     try {
       return traverseObject(null, query).every((v) => v === null);
     } catch (e) {
@@ -180,11 +180,11 @@ export function isExists(parsedJson, query, expectedTypes) {
       /** @type {import("k6").JSONValue} */ (parsedJson),
       query,
     );
-    if (res.length === 0) return expectedTypes.includes(null);
+    if (res.length === 0) return expectedTypes.includes("null");
 
     return res.every((value) => {
       const valueType = typeof value;
-      if (value === null) return expectedTypes.includes(null);
+      if (value === null) return expectedTypes.includes("null");
       if (Array.isArray(value))
         return (
           expectedTypes.includes("array") || expectedTypes.includes("object")
@@ -373,8 +373,6 @@ function flatMap(arr, callback) {
  * @returns {Array<import("k6").JSONValue>} - An array of values found at the query path. Returns empty array if path doesn't exist or input is null/undefined.
  */
 export function traverseObject(obj, query) {
-  // NOTE: Implementation of traverseObject remains the same as the previous version.
-  // It should already handle null/undefined inputs and non-object traversal steps gracefully.
   if (obj === null || obj === undefined) {
     return [];
   }

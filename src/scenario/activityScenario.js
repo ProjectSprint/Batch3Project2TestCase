@@ -3,6 +3,7 @@ import { getActivitites, getActivity } from "../assertion/activityAssertion.js";
 import {
   isEqual,
   isEqualWith,
+  isEveryItemContain,
   isEveryItemDifferent,
   isExists,
   isTotalDataInRange,
@@ -63,9 +64,15 @@ export function GetActivityScenario(config, tags, info) {
 
   let user = info.user;
   if (!isUser(user)) {
-    console.warn(`${featureName} needs a valid user`);
+    console.warn(`${featureName} needs a valid 'user' for the actor`);
     return undefined;
   }
+  if (!info.testBeginTime) {
+    console.warn(`${featureName} needs a 'testBeginTime' for range tests!`);
+    return undefined;
+  }
+  const testBegin = new Date(info.testBeginTime);
+  const now = new Date();
 
   if (config.runNegativeCase) {
     assertHandler({
@@ -83,6 +90,118 @@ export function GetActivityScenario(config, tags, info) {
   }
 
   // --- Positive Case ---
+  /** @type {import("src/types/assertion.js").Checkers} */
+  const positiveCases = {
+    ["should return 200"]: (_parsed, res) => res.status === 200,
+    ["activityId should be string"]: (parsed, _res) =>
+      isExists(parsed, "[].activityId", ["string"]),
+    ["activityType should be string"]: (parsed, _res) =>
+      isExists(parsed, "[].activityType", ["string"]),
+    ["doneAt should be string"]: (parsed, _res) =>
+      isExists(parsed, "[].doneAt", ["string"]),
+    ["durationInMinutes should be number"]: (parsed, _res) =>
+      isExists(parsed, "[].durationInMinutes", ["number"]),
+    ["createdAt should be string"]: (parsed, _res) =>
+      isExists(parsed, "[].createdAt", ["string"]),
+  };
+
+  // pagination test
+  assertHandler({
+    featureName: featureName,
+    config: config,
+    route: route,
+    params: {
+      limit: 1,
+      offset: 0,
+    },
+    headers: { Authorization: user.token },
+    currentTestName: "success get product with limited pagination",
+    expectedCase: combine(positiveCases, {
+      ["should have less than 2 items"]: (parsed, _res) =>
+        isTotalDataInRange(parsed, "[]", 0, 1),
+    }),
+    tags: {},
+  });
+  // todo: when pagination params are invalid
+
+  // date range test
+  assertHandler({
+    featureName: featureName,
+    config: config,
+    route: route,
+    params: {
+      limit: 5,
+      offset: 0,
+      doneAtFrom: testBegin.toISOString(),
+      doneAtTo: now.toISOString(),
+    },
+    headers: { Authorization: user.token },
+    currentTestName: "success get product with limited date",
+    expectedCase: combine(positiveCases, {
+      ["should have less than 6 items"]: (parsed, _res) =>
+        isTotalDataInRange(parsed, "[]", 0, 5),
+      ["should have items within the range"]: (parsed, _res) =>
+        isEqualWith(parsed, "[].doneAt", (item) => {
+          if (typeof item === "string") {
+            const date = new Date(item);
+            return date <= now && date >= testBegin;
+          }
+          return false;
+        }),
+    }),
+    tags: {},
+  });
+  // todo: when date range params are invalid
+
+  // calorie range test
+  assertHandler({
+    featureName: featureName,
+    config: config,
+    route: route,
+    params: {
+      limit: 5,
+      offset: 0,
+      caloriesBurnedMin: 1,
+      caloriesBurnedMax: 20,
+    },
+    headers: { Authorization: user.token },
+    currentTestName: "success get product with limited calories",
+    expectedCase: combine(positiveCases, {
+      ["should have less than 6 items"]: (parsed, _res) =>
+        isTotalDataInRange(parsed, "[]", 0, 5),
+      ["should have items within the range"]: (parsed, _res) =>
+        isEqualWith(parsed, "[].caloriesBurned", (item) => {
+          if (typeof item === "number") {
+            return item > 1 && item < 20;
+          }
+          return false;
+        }),
+    }),
+    tags: {},
+  });
+  // todo: when calories range params are invalid
+
+  // activity test
+  assertHandler({
+    featureName: featureName,
+    config: config,
+    route: route,
+    params: {
+      limit: 5,
+      offset: 0,
+      activityType: activities[0],
+    },
+    headers: { Authorization: user.token },
+    currentTestName: "success get product with limited pagination",
+    expectedCase: combine(positiveCases, {
+      ["should have less than 6 items"]: (parsed, _res) =>
+        isTotalDataInRange(parsed, "[]", 0, 5),
+      ["should have equal activityType"]: (parsed, _res) =>
+        isEqual(parsed, "[].activityType", activities[0]),
+    }),
+    tags: {},
+  });
+
   const positiveResult = assertHandler({
     featureName: featureName,
     config: config,
@@ -93,19 +212,10 @@ export function GetActivityScenario(config, tags, info) {
     },
     headers: { Authorization: user.token },
     currentTestName: "success get product",
-    expectedCase: {
-      ["should return 200"]: (_parsed, res) => res.status === 200,
-      ["activityId should be string"]: (parsed, _res) =>
-        isExists(parsed, "[].activityId", ["string"]),
-      ["activityType should be string"]: (parsed, _res) =>
-        isExists(parsed, "[].activityType", ["string"]),
-      ["doneAt should be string"]: (parsed, _res) =>
-        isExists(parsed, "[].doneAt", ["string"]),
-      ["durationInMinutes should be number"]: (parsed, _res) =>
-        isExists(parsed, "[].durationInMinutes", ["number"]),
-      ["createdAt should be string"]: (parsed, _res) =>
-        isExists(parsed, "[].createdAt", ["string"]),
-    },
+    expectedCase: combine(positiveCases, {
+      ["should have less than 11 items"]: (parsed, _res) =>
+        isTotalDataInRange(parsed, "[]", 0, 10),
+    }),
     tags: {},
   });
 
@@ -118,6 +228,7 @@ export function GetActivityScenario(config, tags, info) {
     return undefined;
   }
 }
+
 /**
  * @type {import("src/types/scenario.js").Scenario<import("src/entity/app.js").Activity | undefined>}
  */
@@ -218,7 +329,7 @@ export function PostActivityScenario(config, tags, info) {
     currentTestName: "success get product",
     expectedCase: {
       ["should return 201"]: (_parsed, res) => res.status === 201,
-
+      // todo: test calorie burned
       ["activityId should be string"]: (parsed, _res) =>
         isExists(parsed, "activityId", ["string"]),
       ["activityType should be string"]: (parsed, _res) =>
@@ -359,13 +470,13 @@ export function PatchActivityScenario(config, tags, info) {
   const positiveResult = assertHandler({
     featureName: featureName,
     config: config,
-    route: route,
+    route: route, // todo: belum pake activity id yg bener
     body: positivePayload,
     headers: { Authorization: user.token },
     currentTestName: "success post activity",
     expectedCase: {
       ["should return 200"]: (_parsed, res) => res.status === 200,
-
+      // todo: test calorie burned count
       ["activityId should be string"]: (parsed, _res) =>
         isExists(parsed, "activityId", ["string"]),
       ["activityType should be string"]: (parsed, _res) =>
@@ -443,7 +554,7 @@ export function DeleteActivityScenario(config, tags, info) {
   const positiveResult = assertHandler({
     currentTestName: "valid payload",
     featureName: featureName,
-    route: route,
+    route: route, // todo: belum test activityId yg bener
     params: {},
     headers: { Authorization: user.token, Query: activityId },
     expectedCase: {

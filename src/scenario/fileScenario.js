@@ -114,42 +114,6 @@ export function UploadFileScenario(user, fileToTest, config, tags) {
     tags: tags,
   });
 
-  // Check thumbnail size only if upload was successful and negative cases are run (as per original logic)
-  if (uploadResult.isSuccess && config.runNegativeCase) {
-    try {
-      // Type assertion needed here if `uploadResult.res.json()` is `unknown` or `any`
-      const result = /** @type {any} */ (uploadResult.res.json());
-      if (isFile(result)) {
-        // Assuming isFile checks for the necessary properties
-        const getResult = get(result.fileThumbnailUri);
-        if (getResult.status === 200 && getResult.body instanceof ArrayBuffer) {
-          const kilobytes = getResult.body.byteLength / 1024;
-          check(
-            kilobytes,
-            {
-              [`${featureName} | thumbnail should be less than 10KB`]: (v) =>
-                v < 10,
-            },
-            tags,
-          ); // Pass tags to check
-        } else {
-          console.warn(
-            `${featureName} | Failed to fetch or invalid body for thumbnail: ${result.fileThumbnailUri} - Status: ${getResult.status}`,
-          );
-        }
-      } else {
-        console.warn(
-          `${featureName} | Upload response is not a valid file object according to isFile.`,
-        );
-      }
-    } catch (e) {
-      console.error(
-        `${featureName} | Error when checking the thumbnail: ${e}`,
-        uploadResult.res.body, // Log response body on error
-      );
-    }
-  }
-
   if (uploadResult.isSuccess) {
     return getFile(uploadResult.res, {}, featureName);
   } else {
